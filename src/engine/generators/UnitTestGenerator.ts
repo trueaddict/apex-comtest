@@ -27,7 +27,8 @@ export function generateUnitTest() {
         console.log(documentStr);
 
         let content = createTestClassContent(documentStr);
-        let testClassFileName =  path.parse(fileName).dir + '\\' + path.parse(fileName).name + '_Test' + path.parse(fileName).ext;
+        console.log(path.parse(fileName));
+        let testClassFileName =  path.parse(fileName).dir + '/' + path.parse(fileName).name + '_Test' + path.parse(fileName).ext;
         console.log(testClassFileName);
         createTestClass(testClassFileName, content);
         
@@ -41,7 +42,7 @@ export function generateUnitTest() {
 
 
 function createTestClassContent(documentStr : string) : string[] {
-    let content : string[] = ['/**', '* This document is generated automatically with apex-comtest', '*/', '@istest', 'private class TestClass_Test {'];
+    let content : string[] = ['/**', '* This document is generated automatically with apex-comtest', '*/', '@isTest', 'private class TestClass_Test {'];
     const className = parseClassName(documentStr);
 
     const testCases : string[] = documentStr.match(/<unit-test>([\s\S]*?)<\/unit-test>/g) ?? [];
@@ -49,7 +50,7 @@ function createTestClassContent(documentStr : string) : string[] {
         let cleanedMatch = testCase.replace('<unit-test>', '').replace('</unit-test>', '').replace(/\*/g, '').replace(/\s/g, '');
         let lines = cleanedMatch.split(';');
         for (let parsedLine of lines) {
-            let createdLine = createLine(parsedLine, className)
+            let createdLine = createLine(parsedLine, className);
             if (createdLine !== '') {
                 content.push(createdLine);
             }
@@ -86,10 +87,14 @@ function createLine(parsedLine : string, className : string) : string {
     let retLine : string = '';
 
     retLine = createAssertion(parsedLine, className, equalsOperators, 'System.assertEquals');
-    if (retLine != '') return retLine;
+    if (retLine !== '') {
+        return retLine;
+    }
 
     retLine = createAssertion(parsedLine, className, notEqualsOperators, 'System.assertNotEquals');
-    if (retLine != '') return retLine;
+    if (retLine !== '') {
+        return retLine;
+    }
 
     return retLine;
 }

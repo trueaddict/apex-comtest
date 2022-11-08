@@ -17,7 +17,7 @@
     "commands": [
       {
         "command": "apex-comtest.generate-apex-unit-test",
-        "title": "Generate-Apex-unit-test"
+        "title": "CEILI: Generate apex unit test"
       }
     ]
   },
