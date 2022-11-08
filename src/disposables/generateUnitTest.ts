@@ -2,8 +2,10 @@
 import { commands, Disposable, ExtensionContext, window } from 'vscode';
 import Ceili from '../engine/Ceili';
 
+const COMMAND = 'ceili.generate';
+
 export default function(context: ExtensionContext): Disposable {
-    return commands.registerCommand('ceili.generate', () => {
+    return commands.registerCommand(COMMAND, () => {
         try {
             Ceili.run();
         } catch (e : Error | any) {

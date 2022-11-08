@@ -6,6 +6,7 @@ const allowedFileTypes = ['java', 'apex'];
 const equalsOperators = ['=', '==', '==='];
 const notEqualsOperators = ['!=', '!==', '!==='];
 
+const INDENT = 4;
 
 /**
  * 
@@ -28,7 +29,7 @@ export function generateUnitTest() {
 
         let content = createTestClassContent(documentStr);
         console.log(path.parse(fileName));
-        let testClassFileName =  path.parse(fileName).dir + '/' + path.parse(fileName).name + '_Test' + path.parse(fileName).ext;
+        let testClassFileName = path.join(path.parse(fileName).dir, path.parse(fileName).name + '_Test' + path.parse(fileName).ext);
         console.log(testClassFileName);
         createTestClass(testClassFileName, content);
         
@@ -42,19 +43,31 @@ export function generateUnitTest() {
 
 
 function createTestClassContent(documentStr : string) : string[] {
-    let content : string[] = ['/**', '* This document is generated automatically with apex-comtest', '*/', '@isTest', 'private class TestClass_Test {'];
+    let content : string[] = [
+        '/**',
+        '* This document is generated automatically by apex-comtest', 
+        '* @last generated ' + new Date().toISOString(),
+        '*/', 
+        '@isTest', 
+        'private class TestClass_Test {',
+    ];
     const className = parseClassName(documentStr);
 
     const testCases : string[] = documentStr.match(/<unit-test>([\s\S]*?)<\/unit-test>/g) ?? [];
+    let integer = 1;
     for (let testCase of testCases) {
         let cleanedMatch = testCase.replace('<unit-test>', '').replace('</unit-test>', '').replace(/\*/g, '').replace(/\s/g, '');
         let lines = cleanedMatch.split(';');
+        
+        content.push(indent(INDENT) + '@isTest');
+        content.push(indent(INDENT) + 'private static void testMethod' + (integer++).toString() + '() {');
         for (let parsedLine of lines) {
             let createdLine = createLine(parsedLine, className);
             if (createdLine !== '') {
-                content.push(createdLine);
+                content.push(indent(INDENT*2) +createdLine);
             }
         }
+        content.push(indent(INDENT) + '}');
     }
 
     content.push('}');
@@ -123,6 +136,10 @@ function createTestClass(testClassFileName : string, content : string[]) {
     writeFileSync(testClassFileName, content.join('\n'));
 }
 
+function indent(length : number) {
+    return new Array(length+1).join(' ');
+}
+
 
 /**
  * Checks if active document is valid for unit test creation
@@ -151,5 +168,5 @@ function validateDocument(document : vscode.TextDocument | undefined) : boolean 
 
 
 function showMessage(message : string) {
-    vscode.window.showInformationMessage(message);
+    vscode.window.showErrorMessage(message);
 }

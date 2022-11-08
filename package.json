@@ -10,14 +10,24 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:apex-comtest.generate-apex-unit-test"
+    "onLanguage:apex",
+    "onCommand:ceili.generate"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "apex-comtest.generate-apex-unit-test",
+        "command": "ceili.generate",
         "title": "CEILI: Generate apex unit test"
+      }
+    ],
+    "languages": [
+      {
+        "id":"apex",
+        "extensions": [
+          ".cls",
+          ".apex"
+        ]
       }
     ]
   },
