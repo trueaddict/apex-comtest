@@ -29,8 +29,7 @@ export function generateUnitTest() {
         console.log(path.parse(fileName));
         let testClassFileName = path.join(path.parse(fileName).dir, path.parse(fileName).name + '_Test' + path.parse(fileName).ext);
         console.log(testClassFileName);
-        createTestClass(testClassFileName, content);
-        
+        writeFileSync(testClassFileName, content.join('\n'));
     } catch (error) {
         let errMsg = (error as Error).message;
         console.log(error);
@@ -40,16 +39,17 @@ export function generateUnitTest() {
 }
 
 
-function createTestClassContent(documentStr : string) : string[] {
+export function createTestClassContent(documentStr : string) : string[] {
+    const className = parseClassName(documentStr);
     let content : string[] = [
         '/**',
         '* This document is generated automatically by apex-comtest', 
         '* @last generated ' + new Date().toISOString(),
         '*/', 
         '@isTest', 
-        'private class TestClass_Test {',
+        `private class ${className}_Test {`,
     ];
-    const className = parseClassName(documentStr);
+    
 
     const testCases : string[] = documentStr.match(/<unit-test>([\s\S]*?)<\/unit-test>/g) ?? [];
     let integer = 1;
@@ -64,6 +64,7 @@ function createTestClassContent(documentStr : string) : string[] {
             if (isAssertLine(parsedLine)) {
                 // Line contains assertion
                 let assertLine = parsedLine.replace(/\s/g, '');
+                console.log(className);
                 let createdLine = createLine(assertLine, className);
                 if (createdLine !== '') {
                     content.push(indent(INDENT*2) +createdLine);
@@ -90,10 +91,11 @@ function createTestClassContent(documentStr : string) : string[] {
  * @returns documents class name
  */
 function parseClassName(documentStr : string) : string {
-    let regexResult = documentStr.matchAll(/^(private|public|global)(\s|)(virtual|abstract|with sharing|without sharing|)([ \t])+(class)([ \t]+)(.*){/gm);
-    if (regexResult) {
-        const matches = Array.from(regexResult)[0];
-        return matches[7].trim();
+    const re = /^(private|public|global)(\s|)(virtual|abstract|with sharing|without sharing|)([ \t])+(class)([ \t]+)(.*){/gm;
+    const result = re.exec(documentStr);
+    if (result) {
+        const clsName = result[7];
+        return clsName.trim();
     }
     return '';
 }
@@ -157,9 +159,6 @@ function isAssertLine(line : string) : boolean {
 }
 
 
-function createTestClass(testClassFileName : string, content : string[]) {
-    writeFileSync(testClassFileName, content.join('\n'));
-}
 
 function indent(length : number) {
     return new Array(length+1).join(' ');
