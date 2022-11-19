@@ -3,8 +3,8 @@ import { readFileSync, writeFileSync } from 'fs';
 import * as path from 'path';
 
 const allowedFileTypes = ['java', 'apex'];
-const equalsOperators = ['=', '==', '==='];
-const notEqualsOperators = ['!=', '!==', '!==='];
+const equalsOperators = ['==='];
+const notEqualsOperators = ['!=='];
 
 const INDENT = 4;
 
@@ -12,8 +12,6 @@ const INDENT = 4;
  * 
  */
 export function generateUnitTest() {
-
-
     vscode.window.showInformationMessage('Hello World from generateTestClass!');
     let document = vscode.window.activeTextEditor?.document;
     if (!validateDocument(document)) { 
@@ -56,16 +54,27 @@ function createTestClassContent(documentStr : string) : string[] {
     const testCases : string[] = documentStr.match(/<unit-test>([\s\S]*?)<\/unit-test>/g) ?? [];
     let integer = 1;
     for (let testCase of testCases) {
-        let cleanedMatch = testCase.replace('<unit-test>', '').replace('</unit-test>', '').replace(/\*/g, '').replace(/\s/g, '');
+        let cleanedMatch = testCase.replace('<unit-test>', '').replace('</unit-test>', '').replace(/\*/g, '');
         let lines = cleanedMatch.split(';');
         
         content.push(indent(INDENT) + '@isTest');
         content.push(indent(INDENT) + 'private static void testMethod' + (integer++).toString() + '() {');
         for (let parsedLine of lines) {
-            let createdLine = createLine(parsedLine, className);
-            if (createdLine !== '') {
-                content.push(indent(INDENT*2) +createdLine);
-            }
+
+            if (isAssertLine(parsedLine)) {
+                // Line contains assertion
+                let assertLine = parsedLine.replace(/\s/g, '');
+                let createdLine = createLine(assertLine, className);
+                if (createdLine !== '') {
+                    content.push(indent(INDENT*2) +createdLine);
+                }
+            } else {
+                // Test setup
+                let setupLine = parsedLine.replace(/(\r\n|\r|\n)/g, '').trim();
+                if (setupLine !== '') {
+                    content.push(indent(INDENT*2) + setupLine + ';');
+                }
+            }            
         }
         content.push(indent(INDENT) + '}');
     }
@@ -109,7 +118,7 @@ function createLine(parsedLine : string, className : string) : string {
         return retLine;
     }
 
-    return retLine;
+    return parsedLine;
 }
 
 
@@ -129,6 +138,22 @@ function createAssertion(parsedLine : string, className : string, operators : st
         }
     }
     return '';
+}
+
+
+function isAssertLine(line : string) : boolean {
+    for (let operator of equalsOperators) {
+        if (line.includes(operator)) {
+            return true;
+        }
+    }
+    for (let operator of notEqualsOperators) {
+        if (line.includes(operator)) {
+            return true;
+        }
+    }
+    
+    return false;
 }
 
 
