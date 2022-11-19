@@ -4,7 +4,7 @@ Visual Studio Code extension for apex development. Helps developers to code fast
 
 ## Installation
 
-Download latest version: [v0.0.1](/build/apex-comtest-0.0.1.vsix)
+Download latest version: [releases](https://github.com/trueaddict/apex-comtest/releases)
 
 ```
 code --install-extension apex-comtest-0.0.1.vsix
