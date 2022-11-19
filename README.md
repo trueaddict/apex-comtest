@@ -1,12 +1,20 @@
-# apex-comtest README
+# CEILI - VSCODE Extension - README
 
-This is the README for your extension "apex-comtest". After writing up a brief description, we recommend including the following sections.
+Visual Studio Code extension for apex development. Helps developers to code faster by allowing to write unit tests directly to apex class comments.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+### Generate unit test comment block
 
-For example if there is an image subfolder under your extension project workspace:
+Allows developer to generate comment block which will hold the unit test written inside the apex class. Every method should contain it's own unit test block.
+
+> Ctrl/Cmd + Shift + p > CEILI : Generate unit test comment block
+
+### Generate apex unit test
+
+Generate apex test class based on unit test comment block(s). 
+
+> Ctrl/Cmd + Shift + p > CEILI : Generate apex unit test
 
 \!\[feature X\]\(images/feature-x.png\)
 
@@ -14,58 +22,24 @@ For example if there is an image subfolder under your extension project workspac
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+[Apex Development Tools](https://developer.salesforce.com/tools/vscode/en/apex/writing)
 
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+TODO
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+TBD
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+.
 
-### 1.0.0
+### 0.1.0
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+First development release. Ability to write unit test in commend block and generate test class from it.
 
 ---
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
 
 **Enjoy!**

@@ -1,7 +1,7 @@
 // TODO
 // Example: https://github.com/no-stack-dub-sack/apexdox-vs-code/blob/master/src/disposables/docBlockCompletion.ts
 
-import { commands, CompletionItem, CompletionItemKind, CompletionItemProvider, Disposable, languages, Position, SnippetString, TextDocument, window } from "vscode";
+import { commands, CompletionItem, CompletionItemProvider, Disposable, languages, Position, SnippetString, TextDocument, window } from "vscode";
 
 
 const COMMAND = 'ceili.comment';
@@ -46,7 +46,7 @@ export default function commentBlockCompletion() : Disposable {
             const lineIdx = editor.selection.active.line;
         }
 
-        const snippet = new SnippetString('unit-test \n* <unit-test>\n* $0\n* </unit-test>');
+        const snippet = new SnippetString('@unit-test \n* <unit-test>\n* $0\n* </unit-test>');
         editor?.insertSnippet(snippet, position);
     });
     return languages.registerCompletionItemProvider('apex', new DocBlockCompletionProvider(), '@', 'unit-test');

@@ -11,7 +11,8 @@
   ],
   "activationEvents": [
     "onLanguage:apex",
-    "onCommand:ceili.generate"
+    "onCommand:ceili.generate",
+    "onCommand:ceili.commentBlock"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -19,6 +20,10 @@
       {
         "command": "ceili.generate",
         "title": "CEILI: Generate apex unit test"
+      },
+      {
+        "command": "ceili.commentBlock",
+        "title": "CEILI: Generate unit test comment block"
       }
     ],
     "languages": [
@@ -51,5 +56,8 @@
     "mocha": "^10.1.0",
     "typescript": "^4.8.4",
     "@vscode/test-electron": "^2.2.0"
+  },
+  "vsce": {
+    "out": "build"
   }
 }
