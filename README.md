@@ -2,6 +2,14 @@
 
 Visual Studio Code extension for apex development. Helps developers to code faster by allowing to write unit tests directly to apex class comments.
 
+## Installation
+
+Download latest version: [v0.0.1](/build/apex-comtest-0.0.1.vsix)
+
+```
+code --install-extension apex-comtest-0.0.1.vsix
+```
+
 ## Features
 
 ### Generate unit test comment block
